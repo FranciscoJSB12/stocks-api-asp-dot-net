@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotnet_api.Data;
+using dotnet_api.Dtos.Stock;
 using dotnet_api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,6 +39,57 @@ namespace dotnet_api.Controllers
             }
 
             return Ok(stock.ToStockDto());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateStockRequestDto stockDto)
+        {
+            var stockModel = stockDto.ToStockFromCreateDto();
+            _context.Stocks.Add(stockModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
+            // It is going to execute getById and pass in the new object and after that it is going to return in the form of a ToStockDto
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto)
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(s => s.Id == id);
+
+            if (stockModel == null)
+            {
+                return NotFound();
+            }
+
+            stockModel.Symbol = updateDto.Symbol;
+            stockModel.Company = updateDto.Company;
+            stockModel.Purchase = updateDto.Purchase;
+            stockModel.LastDiv = updateDto.LastDiv;
+            stockModel.Industry = updateDto.Industry;
+            stockModel.MarketCap = updateDto.MarketCap;
+
+            _context.SaveChanges();
+
+            return Ok(stockModel.ToStockDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(s => s.Id == id);
+
+            if (stockModel == null)
+            {
+                return NotFound();
+            }
+
+            _context.Stocks.Remove(stockModel);
+
+            _context.SaveChanges();
+
+            return NoContent();
         }
     }
 }
