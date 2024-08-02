@@ -41,7 +41,14 @@ namespace dotnet_api.Repository
                 }
             }
 
-            return await stocks.ToListAsync();
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            // pageNumber = 1 y pageSize = 20
+            // (1 - 1) * 20 = 0
+            // (2 - 1) * 20 = 20
+            // (3 - 1) * 20 = 40
+            // (4 - 1) * 20 = 60
+
+            return await stocks.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
