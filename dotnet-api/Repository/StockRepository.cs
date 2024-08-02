@@ -20,12 +20,13 @@ namespace dotnet_api.Repository
 
         public async Task<List<Stock>> GetAllAsync()
         {
-            return await _context.Stocks.ToListAsync();
+            return await _context.Stocks.Include(c => c.Comments).ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            /*var stock = await _context.Stocks.FindAsync(id); .Find does not work with .Include*/
+            var stock = await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
             return stock;
         }
 
@@ -71,6 +72,12 @@ namespace dotnet_api.Repository
             await _context.SaveChangesAsync();
 
             return stockModel;
+        }
+
+        public Task<bool> StockExists(int id)
+        {
+            return _context.Stocks.AnyAsync(s => s.Id == id);
+            //We're checking if it exists and if it does exists a bool
         }
     }
 }

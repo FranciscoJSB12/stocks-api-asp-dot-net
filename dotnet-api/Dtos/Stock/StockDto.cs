@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnet_api.Dtos.Comment;
 using dotnet_api.Models;
 
 namespace dotnet_api.Dtos.Stock
@@ -22,6 +23,6 @@ namespace dotnet_api.Dtos.Stock
 
         public long MarketCap { get; set; }
 
-        // public List<Comment> Comments { get; set; } = new List<Comment>();
+        public List<CommentDto> Comments { get; set; } = new List<CommentDto>();
     }
 }
