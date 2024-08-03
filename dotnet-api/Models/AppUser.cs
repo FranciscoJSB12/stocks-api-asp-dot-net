@@ -9,6 +9,6 @@ namespace dotnet_api.Models
     // 1. We need to create a user model, so we use the built-in class, that can be customized, after go to the file ApplicationDBContext
     public class AppUser : IdentityUser
     {
-
+        public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
     }
 }
