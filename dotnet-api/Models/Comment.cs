@@ -24,5 +24,7 @@ namespace dotnet_api.Models
         our comment
         Stock navigation property: it's what's going to allow us to navigation within our models, it'll allow us navigate within this relationship, so we can go like this Stock.CompanyName*/
         public Stock? Stock { get; set; }
+        public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }
